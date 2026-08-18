@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/metabolism-tools/pit-adjuster/schema/corporate-action.schema.json",
+  "title": "CorporateAction",
+  "description": "A point-in-time corporate-action record consumed by pit-adjuster. Each event carries an ex-date and an adjustment factor; availability is recorded for auditability.",
+  "type": "object",
+  "required": ["ex_date", "adjustment_factor"],
+  "properties": {
+    "ex_date": {
+      "type": "string",
+      "description": "Ex-date (YYYY-MM-DD). Only events with ex_date <= the rebuild's as-of date participate.",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}"
+    },
+    "adjustment_factor": {
+      "type": "number",
+      "description": "Adjustment factor for the event: (prior_close - cash) / (prior_close * (1 + bonus + transfer)). Must be finite and positive.",
+      "exclusiveMinimum": 0
+    },
+    "available_at": {
+      "type": "string",
+      "description": "ISO timestamp when this event became knowable (audit trail; informational for the engine)."
+    },
+    "action_type": {
+      "type": "string",
+      "description": "Free-form event type, e.g. cash_dividend_stock_distribution."
+    },
+    "action_id": {
+      "type": "string",
+      "description": "Stable event identifier for deduplication and provenance."
+    }
+  },
+  "additionalProperties": true
+}
