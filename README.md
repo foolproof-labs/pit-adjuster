@@ -128,7 +128,7 @@ event, with `ex_date`, `adjustment_factor` and `available_at`:
 
 Invalid records (missing ex-date, non-positive or non-finite factor) are
 dropped; only events with `ex_date <= as_of_date` participate. The schema
-lives in [schema/corporate-action.schema.json](schema/corporate-action.schema.json).
+lives in [schema/corporate-action.schema.json](https://github.com/foolproof-labs/pit-adjuster/blob/main/schema/corporate-action.schema.json).
 
 ## Adjustment math
 
