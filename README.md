@@ -2,13 +2,13 @@
 
 Point-in-time fixed-basis back-adjustment engine for daily price history:
 rebuild prices so that **any day reads exactly what that day could have
-known** 鈥?plus drift detection for vendors that silently switch adjustment
+known** —plus drift detection for vendors that silently switch adjustment
 conventions. Python 3.11+, **zero dependencies**, Windows / Linux / macOS.
 
 ![adjustment chain](https://img.shields.io/badge/deps-0-brightgreen)
 ![python](https://img.shields.io/badge/python-3.11%2B-blue)
 
-**Status:** v0.1 鈥?alpha. The adjustment math is battle-tested inside a
+**Status:** v0.1 —alpha. The adjustment math is battle-tested inside a
 production research pipeline, but this standalone package is new: expect the
 CLI and schema to shift before v1.0.
 
@@ -18,7 +18,7 @@ A-share (and most equity) history arrives from vendors in **current-vintage**
 adjusted form. Two silent dangers:
 
 1. **The convention itself is not point-in-time.** Prices you see today
-   embed every adjustment event that ever happened 鈥?including events that
+   embed every adjustment event that ever happened —including events that
    were announced *after* a historical date. A backtest that uses them reads
    the future.
 2. **Vendors switch conventions silently.** One day your data source starts
@@ -26,9 +26,9 @@ adjusted form. Two silent dangers:
    yesterday. Nothing in the CSV changes shape; every historical signal
    silently changes value.
 
-`pit-adjuster` rebuilds history from two ingredients 鈥?current-vintage
+`pit-adjuster` rebuilds history from two ingredients —current-vintage
 forward-adjusted (qfq) bars plus a **point-in-time corporate-action archive**
-鈥?into a fixed-basis back-adjusted (hfq) chain where each day's price depends
+—into a fixed-basis back-adjusted (hfq) chain where each day's price depends
 only on events whose ex-date is on or before that day. Then it *checks*: did
 the rebuild invert the vendor chain correctly, and does the vendor chain
 still agree with live raw prices today?
@@ -36,32 +36,32 @@ still agree with live raw prices today?
 ## Philosophy
 
 Price history must be reversible. A research pipeline that cannot prove its
-prices were knowable in the past is not doing backtesting 鈥?it is doing
+prices were knowable in the past is not doing backtesting —it is doing
 wishful thinking. `pit-adjuster` treats **look-ahead freedom as a
 verifiable property**, not a style preference:
 
-- **PIT principle** 鈥?every price, factor, and calibration depends only on
+- **PIT principle** —every price, factor, and calibration depends only on
   information available at that historical point. See
   [Kelly et al., "Scaling Point-in-Time Language Models"](https://www.nber.org/papers/w35247)
   (NBER w35247) and
   [Look-Ahead-Bench](https://ar5iv.labs.arxiv.org/html/2601.13770)
   (arXiv:2601.13770) for why the whole industry is converging on this.
-- **Look-ahead bias is measurable** 鈥?Daniel, Sornette & Wohrmann (2008),
+- **Look-ahead bias is measurable** —Daniel, Sornette & Wohrmann (2008),
   ["Look-Ahead Benchmark Bias in Portfolio Performance Evaluation"](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1289222)
   (arXiv:0810.1922) quantify how ex-post benchmark construction inflates
   performance. A vendor that silently swaps adjustment conventions is doing
   exactly this, inside your price column.
-- **Formal ground** 鈥?Fonseca (2026),
+- **Formal ground** —Fonseca (2026),
   ["Look-Ahead-Freedom as Temporal Non-Interference"](https://econpapers.repec.org/paper/arxpapers/2607.04958.htm)
   (arXiv:2607.04958) proves look-ahead-freedom is *undecidable* in general
-  (螤鈦扳倎-hard when availability depends on data values), but admits a
+  (Pi-0-1-hard when availability depends on data values), but admits a
   **linear-time decidable type-effect system on the value-independent
-  fragment** 鈥?windowing, resampling, joins, PIT and vintage reads.
+  fragment** —windowing, resampling, joins, PIT and vintage reads.
 
 **Honest boundary:** this package implements verifiable checks for the
 value-independent fragment of the problem (factor chains, ex-date ordering,
 snapshot equivalence, chain inversion). For the general value-dependent case
-we fall back to heuristic guards and say so explicitly 鈥?verifiability is
+we fall back to heuristic guards and say so explicitly —verifiability is
 claimed only where the theory allows it.
 
 ## Quick start
@@ -101,9 +101,9 @@ prices.
 | Command | What it does |
 | --- | --- |
 | `rebuild` | Rebuild bars to fixed-basis hfq: `open/high/low/close` adjusted, `raw_open/raw_close` nominal, `adj_factor` cumulative multiplier, volume normalized to shares |
-| `invert-check` | Ex-date continuity sanity check: is `raw_{ex-1} 脳 factor_e 鈮?raw_ex`? Informational 鈥?real ex-dates carry overnight returns, so violations can be false positives |
-| `drift-check` | **Static forward-adjustment detection.** Compares inverted raw closes against live raw closes; divergence above tolerance is authoritative 鈥?a vendor chain that no longer matches the archive |
-| `snapshot-equivalence` | Compare two rebuilt outputs (e.g. old and new pipeline versions) date-by-date within tolerance 鈥?the "did anything change?" gate |
+| `invert-check` | Ex-date continuity sanity check: is `raw_{ex-1} × factor_e ≥ raw_ex`? Informational —real ex-dates carry overnight returns, so violations can be false positives |
+| `drift-check` | **Static forward-adjustment detection.** Compares inverted raw closes against live raw closes; divergence above tolerance is authoritative —a vendor chain that no longer matches the archive |
+| `snapshot-equivalence` | Compare two rebuilt outputs (e.g. old and new pipeline versions) date-by-date within tolerance —the "did anything change?" gate |
 | `version` | Print version |
 
 Global flags: `--help` on every subcommand; JSON outputs via `--out` where
@@ -111,7 +111,7 @@ supported; everything else prints a human-readable summary.
 
 ## Data model
 
-**Bars** 鈥?a JSON list of daily bars, each with at least `date` (ISO) and
+**Bars** —a JSON list of daily bars, each with at least `date` (ISO) and
 `close`; `open/high/low/volume/amount/turnover` are preserved through the
 rebuild:
 
@@ -119,7 +119,7 @@ rebuild:
 {"date": "2026-06-12", "open": 95.0, "high": 96.0, "low": 94.5, "close": 95.5, "volume": 1234500}
 ```
 
-**Actions** 鈥?a point-in-time corporate-action archive, one record per
+**Actions** —a point-in-time corporate-action archive, one record per
 event, with `ex_date`, `adjustment_factor` and `available_at`:
 
 ```json
@@ -148,20 +148,20 @@ factor chain, while hfq additionally guarantees that a price at time `t` is
 untouched by events with ex-date after `t`.
 
 Volume normalization follows the A-share convention: most codes store volume
-in lots (脳100 to shares); STAR-market codes (688/689 prefixes) store native
-shares. Both are parameterizable 鈥?see `--volume-to-shares` and the
+in lots (×100 to shares); STAR-market codes (688/689 prefixes) store native
+shares. Both are parameterizable —see `--volume-to-shares` and the
 `native_share_prefixes` argument in `rebuild_bars`.
 
 ## Verification model
 
 `pit-adjuster` never trusts its inputs:
 
-- `invert-check` 鈥?factor continuity at ex-dates (sanity, false-positive
+- `invert-check` —factor continuity at ex-dates (sanity, false-positive
   tolerant)
-- `drift-check` 鈥?inverted raws vs live raws (authoritative divergence
-  detection; this is the "static forward-adjustment detector" 鈥?if a vendor
+- `drift-check` —inverted raws vs live raws (authoritative divergence
+  detection; this is the "static forward-adjustment detector" —if a vendor
   swaps conventions, this fires)
-- `snapshot-equivalence` 鈥?before/after equivalence of two rebuilds, the
+- `snapshot-equivalence` —before/after equivalence of two rebuilds, the
   reproducibility gate for pipeline migrations
 
 Every check is read-only. Nothing here trades, prices, or decides.
@@ -178,11 +178,11 @@ CI runs the full test suite on Ubuntu, Windows and macOS with Python 3.11 and
 
 ## Related work
 
-- [Daniel, Sornette & Wohrmann (2008)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1289222) 鈥?look-ahead benchmark bias, quantified
-- [Fonseca (2026)](https://econpapers.repec.org/paper/arxpapers/2607.04958.htm) 鈥?look-ahead-freedom as temporal non-interference (the verifiability boundary)
+- [Daniel, Sornette & Wohrmann (2008)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1289222) —look-ahead benchmark bias, quantified
+- [Fonseca (2026)](https://econpapers.repec.org/paper/arxpapers/2607.04958.htm) —look-ahead-freedom as temporal non-interference (the verifiability boundary)
 - [Point-in-Time Backtesting: A Formal Bias Taxonomy](https://www.mdpi.com/2227-7390/14/12/2182) (Mathematics 2026, 14(12):2182)
 - [Kelly et al., Scaling Point-in-Time Language Models](https://www.nber.org/papers/w35247) (NBER w35247)
-- [Look-Ahead-Bench](https://ar5iv.labs.arxiv.org/html/2601.13770) (arXiv:2601.13770) 鈥?measuring look-ahead bias in PIT LLMs
+- [Look-Ahead-Bench](https://ar5iv.labs.arxiv.org/html/2601.13770) (arXiv:2601.13770) —measuring look-ahead bias in PIT LLMs
 
 ## Project family
 
