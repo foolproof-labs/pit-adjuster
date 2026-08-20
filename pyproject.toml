@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pit-adjuster"
 version = "0.1.1"
-description = "Point-in-time fixed-basis back-adjustment engine: adjustment factor chains, static forward-adjustment detection, snapshot equivalence checks."
+description = "Point-in-time fixed-basis back-adjustment for daily prices, with corporate-action factor chains, convention-drift detection, and snapshot equivalence checks."
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
