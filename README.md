@@ -1,5 +1,10 @@
 # pit-adjuster
 
+![PyPI version](https://img.shields.io/pypi/v/pit-adjuster.svg)
+![PyPI downloads](https://img.shields.io/pypi/dm/pit-adjuster.svg)
+![CI](https://github.com/foolproof-labs/pit-adjuster/actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
 ## 中文说明
 
 `pit-adjuster` 面向 A 股等股票市场的历史行情复权和公司行为数据处理。
