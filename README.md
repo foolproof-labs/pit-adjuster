@@ -20,14 +20,6 @@ conventions. Python 3.11+, **zero dependencies**, Windows / Linux / macOS.
 production research pipeline, but this standalone package is new: expect the
 CLI and schema to shift before v1.0.
 
-## 中文简介
-
-`pit-adjuster` 面向 A 股等股票市场的历史行情复权和公司行为数据处理。
-它根据带时间点的公司行为档案重建固定基准价格，检查复权因子链是否连续，
-并识别数据供应商悄悄切换复权口径的情况。工具只处理和验证历史数据，
-不预测价格、不提供交易建议；公司行为的发生日、公告时间和数据覆盖范围
-必须由使用者提供并核验。
-
 ## Why this exists
 
 A-share (and most equity) history arrives from vendors in **current-vintage**
